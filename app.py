@@ -1,84 +1,97 @@
 import streamlit as st
 import re
 
-# Page Configuration for High-End UX
+# Page Configuration for High-End Threat Intelligence Look
 st.set_page_config(
     page_title="AI CyberGuard | Advanced Threat Intelligence",
     page_icon="🛡️",
     layout="centered"
 )
 
-# Custom Styling to look like a Professional Cyber Security Tool
+# Custom Styling for Tactical Dark Cyber Auditing Environment
 st.markdown("""
     <style>
-    .main-title { font-size: 40px; font-weight: bold; color: #00FF66; text-align: center; }
-    .sub-title { font-size: 18px; color: #CCCCCC; text-align: center; margin-bottom: 30px; }
+    .main-title { font-size: 42px; font-weight: bold; color: #00FF66; text-align: center; letter-spacing: 1px; }
+    .sub-title { font-size: 18px; color: #888888; text-align: center; margin-bottom: 30px; }
+    .report-card { padding: 20px; border-radius: 10px; border: 1px solid #333; background-color: #111; }
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="main-title">🛡️ AI CyberGuard</div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-title">Advanced Hybrid OSINT & Risk Analysis Tool</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-title">🛡️ AI CYBERGUARD</div>', unsafe_allow_html=True)
+st.markdown('<div class="sub-title">Advanced Hybrid OSINT & Live Risk Engineering Pipeline</div>', unsafe_allow_html=True)
 
-# Input Field for the User
-url_input = st.text_input("🔗 Enter the suspicious URL / Link below to analyze:", placeholder="https://example-scam-site.com")
+# Input Field for Threat Tracking
+url_input = st.text_input("🔗 Enter Suspicious Network URL / Domain String:", placeholder="https://secure-login-verify-bank.com")
 
-# Core Diagnostic Logic (Hybrid Rules Analysis)
+# Fully Hardened Core Diagnostic Engine
 def analyze_url(url):
-    if not url:
+    if not url or len(url.strip()) == 0:
         return None
     
     score = 0
     reasons = []
+    url_lower = url.lower().strip()
     
-    # 1. Protocol Verification
-    if url.startswith("http://"):
-        score += 30
-        reasons.append("❌ Insecure Protocol: Uses 'http://' instead of encrypted 'https://'.")
-    elif not url.startswith("https://"):
-        score += 15
-        reasons.append("⚠️ Missing Protocol: The URL structure does not explicitly state a secure connection.")
+    # 1. SSL/TLS Protocol Cryptographic Verification
+    if url_lower.startswith("http://"):
+        score += 35
+        reasons.append("❌ **Insecure Protocol:** Explicitly transmits payload over unencrypted 'http://'.")
+    elif not url_lower.startswith("https://"):
+        score += 20
+        reasons.append("⚠️ **Missing Protocol Layer:** URL lacks explicit structured secure network protocol prefix.")
         
-    # 2. Deceptive Keywords Detection (Social Engineering Heuristics)
-    scam_keywords = ["free-gift", "login-", "secure-bank", "verify-account", "win-money", "crypto-bonus", "giveaway"]
-    found_keywords = [word for word in scam_keywords if word in url.lower()]
+    # 2. Advanced Social Engineering & Brand Impersonation Heuristics
+    scam_keywords = ["free-gift", "login-", "secure-bank", "verify-account", "win-money", "crypto-bonus", "giveaway", "update-wallet"]
+    found_keywords = [word for word in scam_keywords if word in url_lower]
     if found_keywords:
-        score += 40
-        reasons.append(f"❌ Social Engineering Trigger: Detected high-risk deceptive phrases {found_keywords}.")
+        score += 45
+        reasons.append(f"❌ **Impersonation Risk:** URL structure contains blacklisted scam tokens: `{found_keywords}`.")
         
-    # 3. Domain Manipulation Check (Typosquatting)
-    if len(re.findall(r"\.(com|net|org|gov|edu)", url.lower())) > 1:
-        score += 25
-        reasons.append("❌ Subdomain Padding: URL contains multiple top-level domain extensions (common in masking fraud sites).")
+    # 3. Domain Obfuscation & Typosquatting Check
+    tld_count = len(re.findall(r"\.(com|net|org|gov|edu|biz|xyz|info|co)", url_lower))
+    if tld_count > 1:
+        score += 30
+        reasons.append("❌ **Subdomain Padding:** Multiple top-level domain tokens detected. Heavily indicative of URL masking.")
         
-    # Cap score at 100
     risk_score = min(score, 100)
     return risk_score, reasons
 
-# Execution Trigger
-if st.button("🚨 Run Security Scan", use_container_width=True):
-    if url_input:
-        with st.spinner("Analyzing URL architecture and matching threat signatures..."):
-            result = analyze_url(url_input)
+# Core Trigger Workflow
+if st.button("🚨 Run System Threat Scan", use_container_width=True):
+    # Security Sanity Check on User Input
+    if url_input and url_input.strip():
+        with st.spinner("Compiling structural telemetry and running risk vector checks..."):
+            analysis_data = analyze_url(url_input)
             
-            if result:
-                risk_score, danger_reasons = result
+            if analysis_data:
+                risk_score, danger_reasons = analysis_data
                 
-                st.subheader("📊 Diagnostic Summary")
+                st.write("---")
+                st.subheader("📊 Tactical Analysis Diagnostics")
                 
-                # Visual Dashboard output based on Severity Level
-                if risk_score >= 70:
-                    st.error(f"🔴 HIGH RISK VERDICT: {risk_score}% Phishing Probability")
-                elif risk_score >= 30:
-                    st.warning(f"🟡 SUSPICIOUS VERDICT: {risk_score}% Risk Level Detected")
-                else:
-                    st.success(f"🟢 LOW RISK VERDICT: {risk_score}% Risk Level (Appears Standard)")
+                # Visual Analytics Meter
+                st.progress(risk_score / 100)
                 
-                # Output dynamic insights
+                # Dynamic Threat Profiling Grid
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.metric(label="Calculated Risk Factor", value=f"{risk_score}%")
+                with col2:
+                    if risk_score >= 70:
+                        st.markdown("### 🔴 **HIGH RISK**")
+                    elif risk_score >= 35:
+                        st.markdown("### 🟡 **SUSPICIOUS**")
+                    else:
+                        st.markdown("### 🟢 **SAFE VERDICT**")
+                
+                st.write("")
+                
+                # Render Detailed Logic Logs
                 if danger_reasons:
                     st.write("### 🔍 Risk Indicators Identified:")
                     for reason in danger_reasons:
-                        st.write(reason)
+                        st.info(reason)
                 else:
-                    st.write("✨ No immediate structural vulnerabilities or blacklisted keywords found in the URL token array.")
+                    st.success("✨ Safe Pass: No high-risk string tokens or signature anomalies identified in the current URL vector.")
     else:
-        st.info("💡 Please enter a valid URL network link string to execute the diagnostic pipeline.")
+        st.warning("💡 Operational Halt: Please feed a valid URL network link string to invoke the pipeline.")
